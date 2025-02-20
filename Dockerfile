@@ -41,6 +41,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY default.conf /etc/nginx/conf.d/default.conf
 COPY --from=kubevirtmanager/kubevirt-manager:1.5.0 /usr/share/nginx/html /usr/local/openresty/nginx/html
 COPY --from=build /usr/local/share/lua/5.4/resty /usr/local/share/lua/5.4/resty
+COPY --from=build /usr/local/share/lua/5.4/ffi-zlib.lua /usr/local/share/lua/5.4/ffi-zlib.lua
 
 USER nginx:nginx
 
