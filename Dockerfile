@@ -7,6 +7,6 @@ LABEL description="Kubevirt Manager ${VERSION}"
 RUN mkdir -p /etc/nginx/location.d/
 RUN curl -LO https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl && \
     chmod +x ./kubectl && mv ./kubectl /usr/local/bin
-COPY --from=kubevirtmanager/kubevirt-manager:${VERSION} /docker-entrypoint.d /docker-entrypoint.d
-COPY --from=kubevirtmanager/kubevirt-manager:${VERSION} /etc/nginx/conf.d /etc/nginx/conf.d
-COPY --from=kubevirtmanager/kubevirt-manager:${VERSION} /usr/share/nginx/html /usr/share/nginx/html
+COPY --from=kubevirtmanager/kubevirt-manager:1.5.0 /docker-entrypoint.d /docker-entrypoint.d
+COPY --from=kubevirtmanager/kubevirt-manager:1.5.0 /etc/nginx/conf.d /etc/nginx/conf.d
+COPY --from=kubevirtmanager/kubevirt-manager:1.5.0 /usr/share/nginx/html /usr/share/nginx/html
