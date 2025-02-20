@@ -18,8 +18,8 @@ RUN apk add --no-cache \
     make && \
     make install && \
     luarocks install lua-resty-openidc && \
-    curl -fsSLO https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl && \
-    chmod +x ./kubectl && \
+    curl -fsSL -o /usr/bin/kubectl https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl && \
+    chmod +x /usr/bin/kubectl && \
     curl -fsSL -o /usr/bin/catatonit https://github.com/openSUSE/catatonit/releases/download/v0.2.1/catatonit.x86_64 && \
     chmod +x /usr/bin/catatonit
 
@@ -33,7 +33,7 @@ RUN apk add --no-cache \
     echo 'nginx:x:65532:65532::/nonexistent:/sbin/nologin' > /etc/passwd \ && \
     echo 'nginx:x:65532:' > /etc/group
 
-COPY --from=build /usr/bin/catatonit /usr/bin/catatonit
+COPY --from=build /usr/bin/catatonit /usr/bin/kubectl /usr/bin/
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY --from=kubevirtmanager/kubevirt-manager:1.5.0 /etc/nginx/conf.d /etc/nginx/conf.d
 COPY --from=kubevirtmanager/kubevirt-manager:1.5.0 /usr/share/nginx/html /usr/local/openresty/nginx/html
