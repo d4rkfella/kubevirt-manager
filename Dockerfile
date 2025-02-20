@@ -30,7 +30,6 @@ FROM cgr.dev/chainguard/wolfi-base:latest@sha256:7afaeb1ffbc9c33c21b9ddbd96a8014
 ARG VERSION=1.5.0
 
 RUN apk add --no-cache \
-        openresty \
         build-base \
         curl && \
     mkdir -p /etc/nginx/location.d/ && \
@@ -58,7 +57,9 @@ RUN apk add --no-cache \
     curl -fsSL -o /usr/bin/kubectl https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl && \
     chmod +x /usr/bin/kubectl && \
     curl -fsSL -o /usr/bin/catatonit https://github.com/openSUSE/catatonit/releases/download/v0.2.1/catatonit.x86_64 && \
-    chmod +x /usr/bin/catatonit
+    chmod +x /usr/bin/catatonit && \
+    apk add --no-cache \
+        openresty
 
 COPY --chmod=755 docker-entrypoint.sh /
 COPY --chmod=755 10-local-resolvers.envsh 20-envsubst-on-templates.sh 30-tune-worker-processes.sh 40-startkubectl.sh /docker-entrypoint.d
