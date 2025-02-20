@@ -35,7 +35,7 @@ RUN apk add --no-cache \
 
 COPY --from=build /usr/bin/catatonit /usr/bin/kubectl /usr/bin/
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY --from=kubevirtmanager/kubevirt-manager:1.5.0 /etc/nginx/conf.d /etc/nginx/conf.d
+COPY default.conf /etc/nginx/conf.d/default.conf
 COPY --from=kubevirtmanager/kubevirt-manager:1.5.0 /usr/share/nginx/html /usr/local/openresty/nginx/html
 COPY --from=build /usr/local/share/lua/5.4 /usr/local/share/lua/5.4
 
