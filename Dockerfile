@@ -1,8 +1,8 @@
-FROM ghcr.io/d4rkfella/nginx:latest@sha256:800acd1dc436a007212fdd1ece55813b996a73b8b9b7e4c9c04b7b4ffca3c592
+FROM ghcr.io/d4rkfella/nginx:1.27.4@sha256:ddc68b460bba378028a2d7d91bb1c92ad8db20f062def3af2e764099df04dacf
 
 ARG VERSION=1.5.0
 
-LABEL description="Kubevirt Manager ${VERSION}"
+LABEL description="Kubevirt Manager 1.5.0"
 
 RUN mkdir -p /etc/nginx/location.d/ && \
     curl -LO https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl && \
@@ -12,6 +12,6 @@ RUN mkdir -p /etc/nginx/location.d/ && \
     echo 'nginx:x:65532:' > /etc/group
 
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY --from=kubevirtmanager/kubevirt-manager:1.5.0 /docker-entrypoint.d /docker-entrypoint.d
-COPY --from=kubevirtmanager/kubevirt-manager:1.5.0 /etc/nginx/conf.d /etc/nginx/conf.d
-COPY --from=kubevirtmanager/kubevirt-manager:1.5.0 /usr/share/nginx/html /usr/share/nginx/html
+COPY --from=kubevirtmanager/kubevirt-manager:${VERSION} /docker-entrypoint.d /docker-entrypoint.d
+COPY --from=kubevirtmanager/kubevirt-manager:${VERSION} /etc/nginx/conf.d /etc/nginx/conf.d
+COPY --from=kubevirtmanager/kubevirt-manager:${VERSION} /usr/share/nginx/html /usr/share/nginx/html
