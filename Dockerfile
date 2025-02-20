@@ -32,7 +32,10 @@ RUN apk add --no-cache \
     mkdir -p /etc/nginx/location.d/ && \
     rm /etc/passwd /etc/group /etc/nginx/nginx.conf && \
     echo 'nginx:x:65532:65532::/nonexistent:/sbin/nologin' > /etc/passwd \ && \
-    echo 'nginx:x:65532:' > /etc/group
+    echo 'nginx:x:65532:' > /etc/group && \
+    ln -sf /dev/stdout /var/log/nginx/access.log && \
+    ln -sf /dev/stderr /var/log/nginx/error.log && \
+    mkdir /docker-entrypoint.d
 
 COPY docker-entrypoint.sh /
 COPY --chmod=755 10-local-resolvers.envsh 20-envsubst-on-templates.sh 30-tune-worker-processes.sh 40-startkubectl.sh /docker-entrypoint.d
