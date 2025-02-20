@@ -38,7 +38,7 @@ RUN apk add --no-cache \
     echo 'nginx:x:65532:65532::/nonexistent:/sbin/nologin' > /etc/passwd \ && \
     echo 'nginx:x:65532:' > /etc/group && \
     mkdir /docker-entrypoint.d && \
-    chmod 755 /docker-entrypoint.d
+    chmod 755 /docker-entrypoint.d && \
     curl -fsSLO http://www.lua.org/ftp/lua-5.4.7.tar.gz && \
     tar zxf lua-5.4.7.tar.gz && \
     cd lua-5.4.7 && \
