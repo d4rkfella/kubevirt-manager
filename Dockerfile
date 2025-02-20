@@ -17,7 +17,7 @@ RUN apk add --no-cache \
     ./configure --with-lua-include=/usr/local/include && \
     make && \
     make install && \
-    luarocks install lua-resty-openidc && \
+    luarocks install lua-resty-openidc lua-resty-redis-connector  && \
     curl -fsSL -o /usr/bin/kubectl https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl && \
     chmod +x /usr/bin/kubectl && \
     curl -fsSL -o /usr/bin/catatonit https://github.com/openSUSE/catatonit/releases/download/v0.2.1/catatonit.x86_64 && \
@@ -33,13 +33,15 @@ RUN apk add --no-cache \
     echo 'nginx:x:65532:65532::/nonexistent:/sbin/nologin' > /etc/passwd \ && \
     echo 'nginx:x:65532:' > /etc/group
 
+COPY docker-entrypoint.sh /
+COPY 10-local-resolvers.envsh 20-envsubst-on-templates.sh 30-tune-worker-processes.sh 40-startkubectl.sh /docker-entrypoint.d
 COPY --from=build /usr/bin/catatonit /usr/bin/kubectl /usr/bin/
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY default.conf /etc/nginx/conf.d/default.conf
 COPY --from=kubevirtmanager/kubevirt-manager:1.5.0 /usr/share/nginx/html /usr/local/openresty/nginx/html
-COPY --from=build /usr/local/share/lua/5.4 /usr/local/share/lua/5.4
+COPY --from=build /usr/local/share/lua/5.4/resty /usr/local/share/lua/5.4/resty
 
 USER nginx:nginx
 
-ENTRYPOINT ["/usr/bin/catatonit", "--"]
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]
+CMD ["openresty", "-g", "daemon off;"]
