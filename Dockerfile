@@ -26,7 +26,7 @@ RUN apk add --no-cache \
 FROM cgr.dev/chainguard/wolfi-base:latest@sha256:7afaeb1ffbc9c33c21b9ddbd96a80140df1a5fa95aed6411b210bcb404e75c11
 ARG VERSION=1.5.0
 
-RUN RUN apk add --no-cache \
+RUN apk add --no-cache \
         openresty && \
     mkdir -p /etc/nginx/location.d/ && \
     rm /etc/passwd /etc/group /etc/nginx/nginx.conf && \
