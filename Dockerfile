@@ -47,5 +47,5 @@ COPY --from=build --chmod=755 /usr/local/share/lua/5.4/ffi-zlib.lua /usr/local/s
 
 USER nginx:nginx
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT ["catatonit", "--", "/docker-entrypoint.sh"]
 CMD ["openresty", "-g", "daemon off;"]
