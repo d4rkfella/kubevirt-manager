@@ -17,7 +17,8 @@ RUN apk add --no-cache \
     ./configure --with-lua-include=/usr/local/include && \
     make && \
     make install && \
-    luarocks install lua-resty-openidc lua-resty-redis-connector  && \
+    luarocks install lua-resty-openidc && \
+    luarocks install lua-resty-redis-connector && \
     curl -fsSL -o /usr/bin/kubectl https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl && \
     chmod +x /usr/bin/kubectl && \
     curl -fsSL -o /usr/bin/catatonit https://github.com/openSUSE/catatonit/releases/download/v0.2.1/catatonit.x86_64 && \
