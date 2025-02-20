@@ -59,7 +59,7 @@ RUN apk add --no-cache \
         openresty && \
     rm /etc/passwd /etc/group /etc/nginx/nginx.conf && \
     echo 'nginx:x:65532:65532::/nonexistent:/sbin/nologin' > /etc/passwd \ && \
-    echo 'nginx:x:65532:' > /etc/group && \
+    echo 'nginx:x:65532:' > /etc/group
 
 COPY --chmod=755 docker-entrypoint.sh /
 COPY --chmod=755 10-local-resolvers.envsh 20-envsubst-on-templates.sh 30-tune-worker-processes.sh 40-startkubectl.sh /docker-entrypoint.d
