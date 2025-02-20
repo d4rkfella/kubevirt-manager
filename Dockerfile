@@ -33,9 +33,6 @@ RUN apk add --no-cache \
         build-base \
         curl && \
     mkdir -p /etc/nginx/location.d/ && \
-    rm /etc/passwd /etc/group /etc/nginx/nginx.conf && \
-    echo 'nginx:x:65532:65532::/nonexistent:/sbin/nologin' > /etc/passwd \ && \
-    echo 'nginx:x:65532:' > /etc/group && \
     mkdir /docker-entrypoint.d && \
     chmod 755 /docker-entrypoint.d && \
     curl -fsSLO http://www.lua.org/ftp/lua-5.4.7.tar.gz && \
@@ -59,7 +56,10 @@ RUN apk add --no-cache \
     curl -fsSL -o /usr/bin/catatonit https://github.com/openSUSE/catatonit/releases/download/v0.2.1/catatonit.x86_64 && \
     chmod +x /usr/bin/catatonit && \
     apk add --no-cache \
-        openresty
+        openresty && \
+    rm /etc/passwd /etc/group /etc/nginx/nginx.conf && \
+    echo 'nginx:x:65532:65532::/nonexistent:/sbin/nologin' > /etc/passwd \ && \
+    echo 'nginx:x:65532:' > /etc/group && \
 
 COPY --chmod=755 docker-entrypoint.sh /
 COPY --chmod=755 10-local-resolvers.envsh 20-envsubst-on-templates.sh 30-tune-worker-processes.sh 40-startkubectl.sh /docker-entrypoint.d
