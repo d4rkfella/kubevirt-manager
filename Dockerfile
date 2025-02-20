@@ -43,5 +43,5 @@ COPY --from=build /usr/local/share/lua/5.4/resty /usr/local/share/lua/5.4/resty
 
 USER nginx:nginx
 
-ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/catatonit", "--", "/docker-entrypoint.sh"]
 CMD ["openresty", "-g", "daemon off;"]
