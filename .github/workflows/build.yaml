@@ -48,6 +48,9 @@ jobs:
         tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+        labels: |
+            description="Kubevirt Manager ${{ env.VERSION }}"
+            org.opencontainers.image.source="https://github.com/kubevirt-manager/kubevirt-manager"
         platforms: linux/amd64
         file: Dockerfile
         context: .
