@@ -35,13 +35,13 @@ RUN apk add --no-cache \
     echo 'nginx:x:65532:' > /etc/group
 
 COPY docker-entrypoint.sh /
-COPY 10-local-resolvers.envsh 20-envsubst-on-templates.sh 30-tune-worker-processes.sh 40-startkubectl.sh /docker-entrypoint.d
-COPY --from=build /usr/bin/catatonit /usr/bin/kubectl /usr/bin/
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY default.conf /etc/nginx/conf.d/default.conf
-COPY --from=kubevirtmanager/kubevirt-manager:1.5.0 /usr/share/nginx/html /usr/local/openresty/nginx/html
-COPY --from=build /usr/local/share/lua/5.4/resty /usr/local/share/lua/5.4/resty
-COPY --from=build /usr/local/share/lua/5.4/ffi-zlib.lua /usr/local/share/lua/5.4/ffi-zlib.lua
+COPY --chmod=755 10-local-resolvers.envsh 20-envsubst-on-templates.sh 30-tune-worker-processes.sh 40-startkubectl.sh /docker-entrypoint.d
+COPY --from=build --chmod=755 /usr/bin/catatonit /usr/bin/kubectl /usr/bin/
+COPY --chmod=755 nginx.conf /etc/nginx/nginx.conf
+COPY --chmod=755 default.conf /etc/nginx/conf.d/default.conf
+COPY --from=kubevirtmanager/kubevirt-manager:1.5.0 --chmod=755 /usr/share/nginx/html /usr/local/openresty/nginx/html
+COPY --from=build --chmod=755 /usr/local/share/lua/5.4/resty /usr/local/share/lua/5.4/resty
+COPY --from=build --chmod=755 /usr/local/share/lua/5.4/ffi-zlib.lua /usr/local/share/lua/5.4/ffi-zlib.lua
 
 USER nginx:nginx
 
