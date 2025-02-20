@@ -33,8 +33,6 @@ RUN apk add --no-cache \
     rm /etc/passwd /etc/group /etc/nginx/nginx.conf && \
     echo 'nginx:x:65532:65532::/nonexistent:/sbin/nologin' > /etc/passwd \ && \
     echo 'nginx:x:65532:' > /etc/group && \
-    ln -sf /dev/stdout /var/log/nginx/access.log && \
-    ln -sf /dev/stderr /var/log/nginx/error.log && \
     mkdir /docker-entrypoint.d
 
 COPY docker-entrypoint.sh /
