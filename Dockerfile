@@ -39,7 +39,7 @@ RUN apk add --no-cache \
     chmod 755 /docker-entrypoint.d
 
 COPY --chmod=755 docker-entrypoint.sh /
-COPY --chmod=755 12-listen-on-ipv6-by-default.sh 15-local-resolvers.envsh 20-envsubst-on-templates.sh 30-tune-worker-processes.sh 11-startkubectl.sh /docker-entrypoint.d/
+COPY --chmod=755 15-local-resolvers.envsh 30-tune-worker-processes.sh 91-startkubectl.sh /docker-entrypoint.d/
 COPY --from=build --chmod=755 /usr/bin/kubectl /usr/bin/kubectl
 COPY --chmod=755 nginx.conf /etc/nginx/nginx.conf
 COPY --chmod=755 default.conf /etc/nginx/conf.d/default.conf
