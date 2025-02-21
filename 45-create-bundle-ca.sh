@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -eu
+
 OUTPUT_FILE="/etc/ssl/certs/combined-ca-certificates.crt"
 
 CERTS_DIR="/etc/ssl/certs"
