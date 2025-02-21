@@ -21,6 +21,9 @@ RUN apk add --no-cache \
     luarocks install lua-resty-openidc && \
     luarocks install lua-resty-redis-connector && \
     luarocks list && \
+    luarocks show lua-resty-string && \
+    luarocks show lua-resty-openidc && \
+    luarocks show lua-resty-session && \
     curl -fsSL -o /usr/bin/kubectl https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl && \
     chmod +x /usr/bin/kubectl
 
