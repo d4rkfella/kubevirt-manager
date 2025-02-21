@@ -102,7 +102,7 @@ RUN apk add --no-cache \
     rm -rf /tmp/*
 
 COPY --chmod=755 docker-entrypoint.sh /
-COPY --chmod=755 15-local-resolvers.envsh 30-tune-worker-processes.sh 91-startkubectl.sh /docker-entrypoint.d/
+COPY --chmod=755 15-local-resolvers.envsh 30-tune-worker-processes.sh 45-create-bundle-ca.sh 91-startkubectl.sh /docker-entrypoint.d/
 COPY --chmod=755 nginx.conf /etc/nginx/nginx.conf
 COPY --chmod=755 default.conf /etc/nginx/conf.d/default.conf
 COPY --from=kubevirtmanager/kubevirt-manager:1.5.0 --chmod=755 /usr/share/nginx/html /usr/local/openresty/nginx/html
