@@ -78,6 +78,8 @@ RUN apk add --no-cache \
         --with-threads \
         --with-luajit-xcflags='-DLUAJIT_NUMMODE=2 -DLUAJIT_ENABLE_LUA52COMPAT' \
         --with-pcre-jit && \
+    make && \
+    make install && \
     cd .. && \
     curl -fsSLO https://luarocks.github.io/luarocks/releases/luarocks-3.11.1.tar.gz && \
     tar zxf luarocks-3.11.1.tar.gz && \
