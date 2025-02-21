@@ -25,6 +25,13 @@ RUN apk add --no-cache \
 FROM cgr.dev/chainguard/wolfi-base:latest@sha256:7afaeb1ffbc9c33c21b9ddbd96a80140df1a5fa95aed6411b210bcb404e75c11
 ARG VERSION=1.5.0
 
+ENV \
+    APISERVER=https://kubernetes.default.svc
+    SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
+    NAMESPACE=$(cat ${SERVICEACCOUNT}/namespace)
+    TOKEN=$(cat ${SERVICEACCOUNT}/token)
+    CACERT=${SERVICEACCOUNT}/ca.crt
+
 RUN apk add --no-cache \
         openresty \
         libfontconfig1 && \
@@ -48,6 +55,6 @@ USER nginx:nginx
 
 STOPSIGNAL SIGQUIT
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT ["/bin/sh", "-c", "/usr/bin/kubectl proxy --www=/usr/local/openresty/nginx/html --accept-hosts=^.*$ --address=[::] --api-prefix=/k8s/ --www-prefix= &"]
 
 CMD ["openresty", "-g", "daemon off;"]
