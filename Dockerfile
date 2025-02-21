@@ -20,16 +20,14 @@ RUN apk add --no-cache \
     luarocks install lua-resty-openidc && \
     luarocks install lua-resty-redis-connector && \
     curl -fsSL -o /usr/bin/kubectl https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl && \
-    chmod +x /usr/bin/kubectl && \
-    curl -fsSL -o /usr/bin/catatonit https://github.com/openSUSE/catatonit/releases/download/v0.2.1/catatonit.x86_64 && \
-    chmod +x /usr/bin/catatonit
+    chmod +x /usr/bin/kubectl
 
 FROM cgr.dev/chainguard/wolfi-base:latest@sha256:7afaeb1ffbc9c33c21b9ddbd96a80140df1a5fa95aed6411b210bcb404e75c11
 ARG VERSION=1.5.0
 
 RUN apk add --no-cache \
         openresty && \
-
+        libfontconfig1 && \
     mkdir -p /etc/nginx/location.d/ && \
     rm /etc/passwd /etc/group /etc/nginx/nginx.conf && \
     echo 'nginx:x:65532:65532::/nonexistent:/sbin/nologin' > /etc/passwd \ && \
@@ -39,7 +37,7 @@ RUN apk add --no-cache \
 
 COPY --chmod=755 docker-entrypoint.sh /
 COPY --chmod=755 10-local-resolvers.envsh 20-envsubst-on-templates.sh 30-tune-worker-processes.sh 40-startkubectl.sh /docker-entrypoint.d
-COPY --from=build --chmod=755 /usr/bin/catatonit /usr/bin/kubectl /usr/bin/
+COPY --from=build --chmod=755 /usr/bin/kubectl /usr/bin/kubectl
 COPY --chmod=755 nginx.conf /etc/nginx/nginx.conf
 COPY --chmod=755 default.conf /etc/nginx/conf.d/default.conf
 COPY --from=kubevirtmanager/kubevirt-manager:1.5.0 --chmod=755 /usr/share/nginx/html /usr/local/openresty/nginx/html
@@ -48,5 +46,8 @@ COPY --from=build --chmod=755 /usr/local/share/lua/5.4/ffi-zlib.lua /usr/local/s
 
 USER nginx:nginx
 
-ENTRYPOINT ["catatonit", "--", "/docker-entrypoint.sh"]
+STOPSIGNAL SIGQUIT
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
 CMD ["openresty", "-g", "daemon off;"]
