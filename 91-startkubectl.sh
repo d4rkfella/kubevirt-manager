@@ -1,4 +1,6 @@
 #!/bin/sh
+
+set -euo pipefail
 # Point to the internal API server hostname
 export APISERVER=https://kubernetes.default.svc
 
