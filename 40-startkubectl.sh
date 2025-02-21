@@ -15,4 +15,4 @@ export TOKEN=$(cat ${SERVICEACCOUNT}/token)
 export CACERT=${SERVICEACCOUNT}/ca.crt
 
 # Forward requests to kubernetes-api
-/usr/bin/kubectl proxy --www=/usr/share/nginx/html --accept-hosts=^.*$ --address=[::] --api-prefix=/k8s/ --www-prefix= &
+/usr/bin/kubectl proxy --www=/usr/local/openresty/nginx/html --accept-hosts=^.*$ --address=[::] --api-prefix=/k8s/ --www-prefix= &
