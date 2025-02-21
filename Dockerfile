@@ -26,7 +26,7 @@ FROM cgr.dev/chainguard/wolfi-base:latest@sha256:7afaeb1ffbc9c33c21b9ddbd96a8014
 ARG VERSION=1.5.0
 
 RUN apk add --no-cache \
-        openresty && \
+        openresty \
         libfontconfig1 && \
     mkdir -p /etc/nginx/location.d/ && \
     rm /etc/passwd /etc/group /etc/nginx/nginx.conf && \
