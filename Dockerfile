@@ -11,7 +11,8 @@ RUN apk add --no-cache \
         perl \
         gcc \
         geoip \
-        libbrotlidec1 && \
+        libbrotlidec1 \
+        pcre && \
     apk add --no-cache --virtual .build-deps \
         build-base \
         perl-dev \
