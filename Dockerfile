@@ -47,7 +47,6 @@ COPY --chmod=755 nginx.conf /etc/nginx/nginx.conf
 COPY --chmod=755 default.conf /etc/nginx/conf.d/default.conf
 COPY --from=kubevirtmanager/kubevirt-manager:1.5.0 --chmod=755 /usr/share/nginx/html /usr/local/openresty/nginx/html
 COPY --from=build --chmod=755 /usr/local/lib/luarocks/rocks-5.4 /usr/local/openresty/lualib/resty
-COPY --from=build --chmod=755 /usr/local/lib/luarocks/rocks-5.4/ffi-zlib.lua /usr/local/openresty/lualib/ffi-zlib.lua
 
 USER nginx:nginx
 
