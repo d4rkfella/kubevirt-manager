@@ -48,6 +48,6 @@ USER nginx:nginx
 
 STOPSIGNAL SIGQUIT
 
-ENTRYPOINT ["/bin/sh", "-c", "/usr/bin/kubectl proxy --www=/usr/local/openresty/nginx/html --accept-hosts=^.*$ --address=[::] --api-prefix=/k8s/ --www-prefix= &"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
 
 CMD ["openresty", "-g", "daemon off;"]
