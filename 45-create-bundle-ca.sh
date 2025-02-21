@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 OUTPUT_FILE="/etc/ssl/certs/combined-ca-certificates.crt"
 
