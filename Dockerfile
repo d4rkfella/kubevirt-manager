@@ -14,6 +14,7 @@ RUN apk add --no-cache \
         libgcc \
         geoip \
         libbrotlidec1 \
+        openssl \
         pcre && \
     apk add --no-cache --virtual .build-deps \
         build-base \
