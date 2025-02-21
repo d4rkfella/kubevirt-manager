@@ -20,10 +20,6 @@ RUN apk add --no-cache \
     luarocks install lua-resty-string && \
     luarocks install lua-resty-openidc && \
     luarocks install lua-resty-redis-connector && \
-    luarocks list && \
-    luarocks show lua-resty-string && \
-    luarocks show lua-resty-openidc && \
-    luarocks show lua-resty-session && \
     curl -fsSL -o /usr/bin/kubectl https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl && \
     chmod +x /usr/bin/kubectl
 
@@ -49,7 +45,8 @@ COPY --from=build --chmod=755 /usr/bin/kubectl /usr/bin/kubectl
 COPY --chmod=755 nginx.conf /etc/nginx/nginx.conf
 COPY --chmod=755 default.conf /etc/nginx/conf.d/default.conf
 COPY --from=kubevirtmanager/kubevirt-manager:1.5.0 --chmod=755 /usr/share/nginx/html /usr/local/openresty/nginx/html
-COPY --from=build --chmod=755 /usr/local/lib/luarocks/rocks-5.4 /usr/local/openresty/lualib/resty
+COPY --from=build --chmod=755 /usr/local/share/lua/5.4/resty /usr/local/openresty/lualib/resty
+COPY --from=build --chmod=755 /usr/local/share/lua/5.4/ffi-zlib.lua /usr/local/openresty/lualib/ffi-zlib.lua
 
 USER nginx:nginx
 
