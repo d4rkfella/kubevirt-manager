@@ -9,7 +9,7 @@ WORKDIR /tmp
 RUN apk add --no-cache \
         libfontconfig1 \
         perl \
-        gcc \
+        libgcc \
         geoip \
         libbrotlidec1 \
         pcre && \
