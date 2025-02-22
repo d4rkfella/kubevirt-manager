@@ -101,6 +101,7 @@ RUN apk add --no-cache --virtual .build-deps \
     ./configure --with-lua-include=/usr/local/include && \
     make && \
     make install && \
+    cd .. && \
     luarocks install lua-resty-openidc && \
     luarocks install lua-resty-redis-connector && \
     curl -fsSLO "https://dl.k8s.io/$KUBECTL_VERSION/bin/linux/amd64/kubectl{,.sig,.cert,.sha256}" && \
