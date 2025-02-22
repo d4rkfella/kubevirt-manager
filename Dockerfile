@@ -32,7 +32,7 @@ RUN apk add --no-cache --virtual .build-deps \
     cd openresty-${OPENRESTY_VERSION#v} && \
     ./configure \
         --with-pcre \
-        --with-cc-opt='-DNGX_LUA_ABORT_AT_PANIC -I/usr/local/include' \
+        --with-cc-opt='-DNGX_LUA_ABORT_AT_PANIC -I/usr/include' \
         --with-ld-opt='-L/usr/lib -Wl,-rpath,/usr/lib' \
         --with-compat \
         --conf-path=/etc/nginx/nginx.conf \
