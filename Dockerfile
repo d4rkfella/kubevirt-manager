@@ -42,9 +42,7 @@ RUN apk add --no-cache --virtual .build-deps \
     ln -sf "$(basename "$LUAJIT_BINARY")" /usr/bin/lua && \
     ln -sf "$LUAJIT_INC" /usr/include/lua && \
     cd .. && \
-    curl -fsSL https://openresty.org/package/pubkey.gpg | gpg --no-autostart --import && \
-    curl -fsSLO https://openresty.org/download/openresty-${OPENRESTY_VERSION#v}.tar.gz{,.asc} && \
-    gpg --verify --no-autostart openresty-${OPENRESTY_VERSION#v}.tar.gz.asc openresty-${OPENRESTY_VERSION#v}.tar.gz && \
+    curl -fsSLO https://openresty.org/download/openresty-${OPENRESTY_VERSION#v}.tar.gz && \
     tar -xvf openresty-${OPENRESTY_VERSION#v}.tar.gz && \
     cd openresty-${OPENRESTY_VERSION#v} && \
     ./configure \
