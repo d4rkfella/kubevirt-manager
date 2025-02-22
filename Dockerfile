@@ -9,12 +9,13 @@ WORKDIR /tmp
 
 RUN apk add --no-cache \
         bash \
-        libfontconfig1 \
+        libxslt \
         perl \
+        gd \
         libgcc \
         geoip \
-        libbrotlidec1 \
         openssl \
+        zlib \
         pcre && \
     apk add --no-cache --virtual .build-deps \
         build-base \
