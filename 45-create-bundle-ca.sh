@@ -3,10 +3,10 @@
 set -euo pipefail
 
 OUTPUT_FILE="/etc/ssl/certs/bundled/combined-ca-certificates.crt"
-
 CERTS_DIR="/etc/ssl/certs"
-
 FINGERPRINTS_FILE=$(mktemp)
+
+mkdir -p "$(dirname "$OUTPUT_FILE")"
 
 > "$OUTPUT_FILE"
 
@@ -17,32 +17,30 @@ get_fingerprint() {
 add_certs_to_bundle() {
     local cert_file="$1"
     if [[ -f "$cert_file" ]]; then
-        if openssl crl2pkcs7 -nocrl -certfile "$cert_file" | openssl pkcs7 -print_certs -text -noout > /dev/null 2>&1; then
-            echo "Processing certificates from $cert_file..."
-            openssl crl2pkcs7 -nocrl -certfile "$cert_file" | \
-            openssl pkcs7 -print_certs -text -noout | \
-            awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' | \
-            while read -r line; do
-                if [[ "$line" == *"END CERTIFICATE"* ]]; then
-                    local fingerprint
-                    fingerprint=$(get_fingerprint "$cert")
-                    if ! grep -q "$fingerprint" "$FINGERPRINTS_FILE"; then
-                        echo "$fingerprint" >> "$FINGERPRINTS_FILE"
-                        echo "$cert" >> "$OUTPUT_FILE"
-                    else
-                        echo "Duplicate certificate found in $cert_file with fingerprint: $fingerprint"
-                        echo "Skipping duplicate certificate:"
-                        echo "$cert"
-                        echo "-----"
-                    fi
-                    cert=""
+        echo "Processing certificates from $cert_file..."
+        awk '
+            /BEGIN CERTIFICATE/,/END CERTIFICATE/ {
+                print $0
+            }
+        ' "$cert_file" | while read -r line; do
+            if [[ "$line" == *"END CERTIFICATE"* ]]; then
+                cert+="$line"
+                local fingerprint
+                fingerprint=$(get_fingerprint "$cert")
+                echo "Found certificate with fingerprint: $fingerprint"
+                if ! grep -q "$fingerprint" "$FINGERPRINTS_FILE"; then
+                    echo "$fingerprint" >> "$FINGERPRINTS_FILE"
+                    echo "$cert" >> "$OUTPUT_FILE"
+                    echo "Added certificate to bundle."
                 else
-                    cert+="$line"$'\n'
+                    echo "Duplicate certificate found in $cert_file with fingerprint: $fingerprint"
+                    echo "Skipping duplicate certificate."
                 fi
-            done
-        else
-            echo "Warning: $cert_file is not a valid PEM-encoded certificate or bundle"
-        fi
+                cert=""
+            else
+                cert+="$line"$'\n'
+            fi
+        done
     else
         echo "Warning: $cert_file does not exist"
     fi
