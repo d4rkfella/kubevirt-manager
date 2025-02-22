@@ -91,7 +91,7 @@ RUN apk add --no-cache --virtual .build-deps \
     git clone https://github.com/luarocks/luarocks.git && \
     cd luarocks && \
     git checkout tags/${LUAROCKS_VERSION} && \
-    ./configure --with-lua-include=/usr/include && \
+    ./configure --with-lua-bin=/usr/bin/lua && \
     make && \
     make install && \
     luarocks install lua-resty-openidc && \
