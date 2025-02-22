@@ -1,6 +1,6 @@
 FROM cgr.dev/chainguard/wolfi-base:latest@sha256:7afaeb1ffbc9c33c21b9ddbd96a80140df1a5fa95aed6411b210bcb404e75c11
 
-ARG KUBEVIRT_MANAGER_VERSION=1.5.0
+ARG KUBEVIRT_MANAGER_VERSION=v1.5.0
 ARG LUAJIT_VERSION=v2.1.ROLLING
 ARG OPENRESTY_VERSION=v1.27.1.1
 ARG LUAROCKS_VERSION=v3.11.1
@@ -34,6 +34,7 @@ RUN apk add --no-cache --virtual .build-deps \
     make install && \
     cd .. && \
     curl -fsSLO https://openresty.org/download/openresty-${OPENRESTY_VERSION#v}.tar.gz && \
+    tar -xvf openresty-${OPENRESTY_VERSION#v}.tar.gz && \
     cd openresty-${OPENRESTY_VERSION#v} && \
     ./configure \
         --with-pcre \
