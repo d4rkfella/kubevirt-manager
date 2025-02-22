@@ -33,10 +33,9 @@ RUN apk add --no-cache --virtual .build-deps \
     make && \
     make install && \
     cd .. && \
-    git clone https://github.com/openresty/openresty.git && \
-    cd openresty && \
-    git checkout tags/${OPENRESTY_VERSION} && \
-    ./util/configure \
+    curl -fsSLO https://openresty.org/download/openresty-${OPENRESTY_VERSION#v}.tar.gz && \
+    cd openresty-${OPENRESTY_VERSION#v} && \
+    ./configure \
         --with-pcre \
         --with-cc-opt='-DNGX_LUA_ABORT_AT_PANIC -I/usr/include' \
         --with-ld-opt='-L/usr/lib -Wl,-rpath,/usr/lib' \
