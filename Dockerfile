@@ -30,8 +30,13 @@ RUN apk add --no-cache --virtual .build-deps \
     git clone https://luajit.org/git/luajit.git && \
     cd luajit && \
     git checkout tags/${LUAJIT_VERSION} && \
-    make && \
-    make install && \
+    export LUAJIT_LIB=/usr/lib && \
+    export LUA_LIB_DIR="$LUAJIT_LIB/lua" && \
+    export LUAJIT_INC=/usr/include/luajit-2.1 && \
+    make CCDEBUG=-g PREFIX=/usr -j $(nproc) && \
+    make DESTDIR="${{targets.destdir}}" install PREFIX=/usr && \
+    ln -s luajit ${{targets.destdir}}/usr/bin/lua && \
+    ln -s "$LUAJIT_INC" ${{targets.destdir}}/usr/include/lua && \
     cd .. && \
     curl -fsSLO https://openresty.org/download/openresty-${OPENRESTY_VERSION#v}.tar.gz && \
     tar -xvf openresty-${OPENRESTY_VERSION#v}.tar.gz && \
@@ -77,6 +82,7 @@ RUN apk add --no-cache --virtual .build-deps \
         --with-stream \
         --with-stream_ssl_module \
         --with-threads \
+        --with-luajit=/usr \
         --with-luajit-xcflags='-DLUAJIT_NUMMODE=2 -DLUAJIT_ENABLE_LUA52COMPAT' \
         --with-pcre-jit && \
     make && \
