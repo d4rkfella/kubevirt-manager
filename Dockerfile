@@ -71,7 +71,6 @@ RUN apk add --no-cache --virtual .build-deps \
         --with-stream \
         --with-stream_ssl_module \
         --with-threads \
-        --with-luajit=/usr \
         --with-luajit-xcflags='-DLUAJIT_NUMMODE=2 -DLUAJIT_ENABLE_LUA52COMPAT' \
         --with-pcre-jit && \
     make && \
