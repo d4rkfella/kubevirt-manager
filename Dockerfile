@@ -34,9 +34,9 @@ RUN apk add --no-cache --virtual .build-deps \
     export LUA_LIB_DIR="$LUAJIT_LIB/lua" && \
     export LUAJIT_INC=/usr/include/luajit-2.1 && \
     make CCDEBUG=-g PREFIX=/usr -j $(nproc) && \
-    make DESTDIR="${{targets.destdir}}" install PREFIX=/usr && \
-    ln -s luajit ${{targets.destdir}}/usr/bin/lua && \
-    ln -s "$LUAJIT_INC" ${{targets.destdir}}/usr/include/lua && \
+    make install PREFIX=/usr && \
+    ln -s luajit /usr/bin/lua && \
+    ln -s "$LUAJIT_INC" /usr/include/lua && \
     cd .. && \
     curl -fsSLO https://openresty.org/download/openresty-${OPENRESTY_VERSION#v}.tar.gz && \
     tar -xvf openresty-${OPENRESTY_VERSION#v}.tar.gz && \
