@@ -34,7 +34,7 @@ RUN apk add --no-cache --virtual .build-deps \
     export LUAJIT_INC=/usr/include/luajit-2.1 && \
     make CCDEBUG=-g PREFIX=/usr -j $(nproc) && \
     make install PREFIX=/usr && \
-    LUAJIT_BINARY=$(find /path/to/destdir/usr/bin -name 'luajit-*' -type f | head -n 1) && \
+    LUAJIT_BINARY=$(find /usr/bin -name 'luajit-*' -type f | head -n 1) && \
     if [ -z "$LUAJIT_BINARY" ]; then echo "Error: LuaJIT binary not found!"; exit 1; fi && \
     ln -sf "$(basename "$LUAJIT_BINARY")" /usr/bin/luajit && \
     ln -sf "$(basename "$LUAJIT_BINARY")" /usr/bin/lua && \
