@@ -27,17 +27,6 @@ RUN apk add --no-cache --virtual .build-deps \
         linux-headers \
         libxml2-dev \
         libxslt-dev && \
-    git clone https://luajit.org/git/luajit.git && \
-    cd luajit && \
-    git checkout tags/${LUAJIT_VERSION} && \
-    export LUAJIT_LIB=/usr/lib && \
-    export LUA_LIB_DIR="$LUAJIT_LIB/lua" && \
-    export LUAJIT_INC=/usr/include/luajit-2.1 && \
-    make CCDEBUG=-g PREFIX=/usr -j $(nproc) && \
-    make install PREFIX=/usr && \
-    ln -s luajit /usr/bin/lua && \
-    ln -s "$LUAJIT_INC" /usr/include/lua && \
-    cd .. && \
     curl -fsSLO https://openresty.org/download/openresty-${OPENRESTY_VERSION#v}.tar.gz && \
     tar -xvf openresty-${OPENRESTY_VERSION#v}.tar.gz && \
     cd openresty-${OPENRESTY_VERSION#v} && \
@@ -91,7 +80,7 @@ RUN apk add --no-cache --virtual .build-deps \
     git clone https://github.com/luarocks/luarocks.git && \
     cd luarocks && \
     git checkout tags/${LUAROCKS_VERSION} && \
-    ./configure --prefix=/usr --with-lua-bin=/usr/bin && \
+    ./configure --with-lua-include=/usr/local/include && \
     make && \
     make install && \
     luarocks install lua-resty-openidc && \
