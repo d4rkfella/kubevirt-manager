@@ -42,9 +42,9 @@ RUN apk add --no-cache --virtual .build-deps \
     ln -sf "$(basename "$LUAJIT_BINARY")" /usr/bin/lua && \
     ln -sf "$LUAJIT_INC" /usr/include/lua && \
     cd .. && \
-    curl -fsSL https://openresty.org/package/pubkey.gpg | gpg --import && \
+    curl -fsSL https://openresty.org/package/pubkey.gpg | gpg --no-autostart --import && \
     curl -fsSLO https://openresty.org/download/openresty-${OPENRESTY_VERSION#v}.tar.gz{,.asc} && \
-    gpg --verify openresty-${OPENRESTY_VERSION#v}.tar.gz.asc openresty-${OPENRESTY_VERSION#v}.tar.gz && \
+    gpg --verify --no-autostart openresty-${OPENRESTY_VERSION#v}.tar.gz.asc openresty-${OPENRESTY_VERSION#v}.tar.gz && \
     tar -xvf openresty-${OPENRESTY_VERSION#v}.tar.gz && \
     cd openresty-${OPENRESTY_VERSION#v} && \
     ./configure \
@@ -94,9 +94,9 @@ RUN apk add --no-cache --virtual .build-deps \
     make && \
     make install && \
     cd .. && \
-    curl -fsSL https://hisham.hm/public_key | gpg --import && \
+    curl -fsSL https://hisham.hm/public_key | gpg --import --no-autostart && \
     curl -fsSLO https://luarocks.github.io/luarocks/releases/luarocks-${LUAROCKS_VERSION#v}.tar.gz{,.asc} && \
-    gpg --verify luarocks-${LUAROCKS_VERSION#v}.tar.gz.asc luarocks-${LUAROCKS_VERSION#v}.tar.gz && \
+    gpg --verify --no-autostart luarocks-${LUAROCKS_VERSION#v}.tar.gz.asc luarocks-${LUAROCKS_VERSION#v}.tar.gz && \
     tar zxf luarocks-${LUAROCKS_VERSION#v}.tar.gz && \
     cd luarocks-${LUAROCKS_VERSION#v} && \
     ./configure --with-lua-include=/usr/local/include && \
