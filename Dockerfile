@@ -36,7 +36,7 @@ RUN apk add --no-cache --virtual .build-deps \
     git clone https://github.com/openresty/openresty.git && \
     cd openresty && \
     git checkout tags/${OPENRESTY_VERSION} && \
-    ./configure \
+    ./util/configure \
         --with-pcre \
         --with-cc-opt='-DNGX_LUA_ABORT_AT_PANIC -I/usr/include' \
         --with-ld-opt='-L/usr/lib -Wl,-rpath,/usr/lib' \
