@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-OUTPUT_FILE="/tmp/ssl/certs/bundled/combined-ca-certificates.crt"
+OUTPUT_FILE="/etc/ssl/certs/bundled/combined-ca-certificates.crt"
 CERTS_DIR="/etc/ssl/certs"
 FINGERPRINTS_FILE=$(mktemp)
 
