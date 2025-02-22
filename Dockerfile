@@ -16,6 +16,7 @@ RUN apk add --no-cache --virtual .build-deps \
         perl-dev \
         git \
         curl \
+        cosign \
         openssl-dev \
         pcre-dev \
         zlib-dev \
@@ -40,7 +41,9 @@ RUN apk add --no-cache --virtual .build-deps \
     ln -sf "$(basename "$LUAJIT_BINARY")" /usr/bin/lua && \
     ln -sf "$LUAJIT_INC" /usr/include/lua && \
     cd .. && \
-    curl -fsSLO https://openresty.org/download/openresty-${OPENRESTY_VERSION#v}.tar.gz && \
+    curl -fsSL https://openresty.org/package/pubkey.gpg | gpg --import
+    curl -fsSLO https://openresty.org/download/openresty-${OPENRESTY_VERSION#v}.tar.gz{,.asc} && \
+    gpg --verify openresty-${OPENRESTY_VERSION#v}.tar.gz.asc openresty-${OPENRESTY_VERSION#v}.tar.gz && \
     tar -xvf openresty-${OPENRESTY_VERSION#v}.tar.gz && \
     cd openresty-${OPENRESTY_VERSION#v} && \
     ./configure \
@@ -90,19 +93,24 @@ RUN apk add --no-cache --virtual .build-deps \
     make && \
     make install && \
     cd .. && \
-    git clone https://github.com/luarocks/luarocks.git && \
-    cd luarocks && \
-    git checkout tags/${LUAROCKS_VERSION} && \
+    curl -fsSL https://hisham.hm/public_key | gpg --import && \
+    curl -fsSLO https://luarocks.github.io/luarocks/releases/luarocks-${LUAROCKS_VERSION#v}.tar.gz{,.asc}
+    gpg --verify luarocks-${LUAROCKS_VERSION#v}.tar.gz.asc luarocks-${LUAROCKS_VERSION#v}.tar.gz && \
+    tar zxf luarocks-${LUAROCKS_VERSION#v}.tar.gz && \
+    cd luarocks-${LUAROCKS_VERSION#v} && \
     ./configure --with-lua-include=/usr/local/include && \
     make && \
     make install && \
     luarocks install lua-resty-openidc && \
     luarocks install lua-resty-redis-connector && \
-    git clone https://github.com/kubernetes/kubernetes.git && \
-    cd kubernetes && \
-    git checkout tags/${KUBECTL_VERSION} && \
-    build/run.sh make kubectl && \
-    chmod +x /usr/bin/kubectl && \
+    curl -fsSLO "https://dl.k8s.io/$KUBECTL_VERSION/bin/linux/amd64/kubectl{,.sig,.cert,.sha256}" && \
+    cosign verify-blob kubectl \
+      --certificate kubectl.cert \
+      --signature kubectl.sig \
+      --certificate-identity krel-staging@k8s-releng-prod.iam.gserviceaccount.com \
+      --certificate-oidc-issuer https://accounts.google.com && \
+    sha256sum -c <(echo "$(cat kubectl.sha256)  kubectl") && \
+    mv kubectl /usr/local/bin/kubectl 
     apk del --purge .build-deps && \
     rm -rf /tmp/*
 
