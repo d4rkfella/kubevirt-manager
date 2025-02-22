@@ -7,17 +7,7 @@ ENV SHELL=/bin/bash
 
 WORKDIR /tmp
 
-RUN apk add --no-cache \
-        bash \
-        libxslt \
-        perl \
-        gd \
-        libgcc \
-        geoip \
-        openssl \
-        zlib \
-        pcre && \
-    apk add --no-cache --virtual .build-deps \
+RUN apk add --no-cache --virtual .build-deps \
         build-base \
         perl-dev \
         git \
@@ -92,6 +82,20 @@ RUN apk add --no-cache \
     ./configure --with-lua-include=/usr/local/include && \
     make && \
     make install && \
+    apk del --purge .build-deps && \
+    rm -rf /tmp/*
+
+RUN apk add --no-cache \
+        bash \
+        libxslt \
+        perl \
+        gd \
+        libgcc \
+        geoip \
+        openssl \
+        zlib \
+        libfontconfig1 \
+        pcre && \
     luarocks install lua-resty-openidc && \
     luarocks install lua-resty-redis-connector && \
     curl -fsSL -o /usr/bin/kubectl https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl && \
@@ -101,9 +105,7 @@ RUN apk add --no-cache \
     echo 'nginx:x:65532:65532::/nonexistent:/sbin/nologin' > /etc/passwd \ && \
     echo 'nginx:x:65532:' > /etc/group && \
     mkdir /docker-entrypoint.d && \
-    chmod 755 /docker-entrypoint.d && \
-    apk del --purge .build-deps && \
-    rm -rf /tmp/*
+    chmod 755 /docker-entrypoint.d
 
 COPY --chmod=755 docker-entrypoint.sh /
 COPY --chmod=755 30-tune-worker-processes.sh 45-create-bundle-ca.sh 91-startkubectl.sh /docker-entrypoint.d/
