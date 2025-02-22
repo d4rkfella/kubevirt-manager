@@ -81,7 +81,7 @@ RUN apk add --no-cache --virtual .build-deps \
     gpg --verify --no-autostart luarocks-${LUAROCKS_VERSION#v}.tar.gz.asc luarocks-${LUAROCKS_VERSION#v}.tar.gz && \
     tar zxf luarocks-${LUAROCKS_VERSION#v}.tar.gz && \
     cd luarocks-${LUAROCKS_VERSION#v} && \
-    ./configure --with-lua-include=/usr/local/include && \
+    ./configure --with-lua-bin=/usr/local/openresty/luajit/bin --with-lua-include=/usr/local/openresty/luajit/include && \
     make && \
     make install && \
     cd .. && \
@@ -96,7 +96,7 @@ RUN apk add --no-cache --virtual .build-deps \
     sha256sum -c <(echo "$(cat kubectl.sha256)  kubectl") && \
     mv kubectl /usr/local/bin/kubectl && \
     apk del --purge .build-deps && \
-    rm -rf /tmp/* /root/* /var/cache/*
+    rm -rf /tmp/*
 
 RUN apk add --no-cache \
         bash \
