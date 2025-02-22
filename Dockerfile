@@ -95,7 +95,7 @@ RUN apk add --no-cache --virtual .build-deps \
     make install && \
     cd .. && \
     curl -fsSL https://hisham.hm/public_key | gpg --import && \
-    curl -fsSLO https://luarocks.github.io/luarocks/releases/luarocks-${LUAROCKS_VERSION#v}.tar.gz{,.asc}
+    curl -fsSLO https://luarocks.github.io/luarocks/releases/luarocks-${LUAROCKS_VERSION#v}.tar.gz{,.asc} && \
     gpg --verify luarocks-${LUAROCKS_VERSION#v}.tar.gz.asc luarocks-${LUAROCKS_VERSION#v}.tar.gz && \
     tar zxf luarocks-${LUAROCKS_VERSION#v}.tar.gz && \
     cd luarocks-${LUAROCKS_VERSION#v} && \
@@ -112,7 +112,7 @@ RUN apk add --no-cache --virtual .build-deps \
       --certificate-identity krel-staging@k8s-releng-prod.iam.gserviceaccount.com \
       --certificate-oidc-issuer https://accounts.google.com && \
     sha256sum -c <(echo "$(cat kubectl.sha256)  kubectl") && \
-    mv kubectl /usr/local/bin/kubectl 
+    mv kubectl /usr/local/bin/kubectl && \
     apk del --purge .build-deps && \
     rm -rf /tmp/*
 
