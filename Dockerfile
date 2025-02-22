@@ -29,13 +29,13 @@ RUN apk add --no-cache --virtual .build-deps \
         libxslt-dev && \
     git clone https://luajit.org/git/luajit.git && \
     cd luajit && \
-    git checkout tags/${LUAJIT_VERSION}
+    git checkout tags/${LUAJIT_VERSION} && \
     make && \
     make install && \
     cd .. && \
     git clone https://github.com/openresty/openresty.git && \
     cd openresty && \
-    git checkout tags/${OPENRESTY_VERSION}
+    git checkout tags/${OPENRESTY_VERSION} && \
     ./configure \
         --with-pcre \
         --with-cc-opt='-DNGX_LUA_ABORT_AT_PANIC -I/usr/include' \
@@ -84,7 +84,7 @@ RUN apk add --no-cache --virtual .build-deps \
     cd .. && \
     git clone https://github.com/luarocks/luarocks.git && \
     cd luarocks && \
-    git checkout tags/${LUAROCKS_VERSION}
+    git checkout tags/${LUAROCKS_VERSION} && \
     ./configure --with-lua-include=/usr/local/include && \
     make && \
     make install && \
