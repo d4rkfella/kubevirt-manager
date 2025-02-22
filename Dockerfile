@@ -1,7 +1,6 @@
 FROM cgr.dev/chainguard/wolfi-base:latest@sha256:7afaeb1ffbc9c33c21b9ddbd96a80140df1a5fa95aed6411b210bcb404e75c11
 
 ARG KUBEVIRT_MANAGER_VERSION=v1.5.0
-ARG LUAJIT_VERSION=v2.1.ROLLING
 ARG OPENRESTY_VERSION=v1.27.1.1
 ARG LUAROCKS_VERSION=v3.11.1
 ARG KUBECTL_VERSION=v1.32.2
@@ -28,26 +27,12 @@ RUN apk add --no-cache --virtual .build-deps \
         linux-headers \
         libxml2-dev \
         libxslt-dev && \
-    git clone https://luajit.org/git/luajit.git && \
-    cd luajit && \
-    git checkout tags/${LUAJIT_VERSION} && \
-    export LUAJIT_LIB=/usr/lib && \
-    export LUA_LIB_DIR="$LUAJIT_LIB/lua" && \
-    export LUAJIT_INC=/usr/include/luajit-2.1 && \
-    make CCDEBUG=-g PREFIX=/usr -j $(nproc) && \
-    make install PREFIX=/usr && \
-    LUAJIT_BINARY=$(find /usr/bin -name 'luajit-*' -type f | head -n 1) && \
-    if [ -z "$LUAJIT_BINARY" ]; then echo "Error: LuaJIT binary not found!"; exit 1; fi && \
-    ln -sf "$(basename "$LUAJIT_BINARY")" /usr/bin/luajit && \
-    ln -sf "$(basename "$LUAJIT_BINARY")" /usr/bin/lua && \
-    ln -sf "$LUAJIT_INC" /usr/include/lua && \
-    cd .. && \
     curl -fsSLO https://openresty.org/download/openresty-${OPENRESTY_VERSION#v}.tar.gz && \
     tar -xvf openresty-${OPENRESTY_VERSION#v}.tar.gz && \
     cd openresty-${OPENRESTY_VERSION#v} && \
     ./configure \
         --with-pcre \
-        --with-cc-opt='-DNGX_LUA_ABORT_AT_PANIC -I/usr/include' \
+        --with-cc-opt='-DNGX_LUA_ABORT_AT_PANIC -I/usr/local/include' \
         --with-ld-opt='-L/usr/lib -Wl,-rpath,/usr/lib' \
         --with-compat \
         --conf-path=/etc/nginx/nginx.conf \
@@ -86,7 +71,6 @@ RUN apk add --no-cache --virtual .build-deps \
         --with-stream \
         --with-stream_ssl_module \
         --with-threads \
-        --with-luajit=/usr \
         --with-luajit-xcflags='-DLUAJIT_NUMMODE=2 -DLUAJIT_ENABLE_LUA52COMPAT' \
         --with-pcre-jit && \
     make && \
@@ -97,7 +81,7 @@ RUN apk add --no-cache --virtual .build-deps \
     gpg --verify --no-autostart luarocks-${LUAROCKS_VERSION#v}.tar.gz.asc luarocks-${LUAROCKS_VERSION#v}.tar.gz && \
     tar zxf luarocks-${LUAROCKS_VERSION#v}.tar.gz && \
     cd luarocks-${LUAROCKS_VERSION#v} && \
-    ./configure --with-lua-include=/usr/include && \
+    ./configure --with-lua-include=/usr/local/include && \
     make && \
     make install && \
     cd .. && \
