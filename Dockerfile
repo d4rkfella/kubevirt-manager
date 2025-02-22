@@ -1,11 +1,10 @@
 FROM cgr.dev/chainguard/wolfi-base:latest@sha256:7afaeb1ffbc9c33c21b9ddbd96a80140df1a5fa95aed6411b210bcb404e75c11
 
-ARG KUBEVIRT_MANAGER_VERSION=v1.5.0
+ARG KUBEVIRT_MANAGER_VERSION=1.5.0
 ARG LUAJIT_VERSION=v2.1.ROLLING
 ARG OPENRESTY_VERSION=v1.27.1.1
 ARG LUAROCKS_VERSION=v3.11.1
 ARG KUBECTL_VERSION=v1.32.2
-
 ENV LUA_PATH=/usr/local/openresty/site/lualib/?.ljbc;/usr/local/openresty/site/lualib/?/init.ljbc;/usr/local/openresty/lualib/?.ljbc;/usr/local/openresty/lualib/?/init.ljbc;/usr/local/openresty/site/lualib/?.lua;/usr/local/openresty/site/lualib/?/init.lua;/usr/local/openresty/lualib/?.lua;/usr/local/openresty/lualib/?/init.lua;./?.lua;/usr/local/openresty/luajit/share/luajit-2.1.0-beta3/?.lua;/usr/local/share/lua/5.1/?.lua;/usr/local/share/lua/5.1/?/init.lua;/usr/local/openresty/luajit/share/lua/5.1/?.lua;/usr/local/openresty/luajit/share/lua/5.1/?/init.lua
 ENV LUA_CPATH=/usr/local/openresty/site/lualib/?.so;/usr/local/openresty/lualib/?.so;./?.so;/usr/local/lib/lua/5.1/?.so;/usr/local/openresty/luajit/lib/lua/5.1/?.so;/usr/local/lib/lua/5.1/loadall.so;/usr/local/openresty/luajit/lib/lua/5.1/?.so
 ENV SHELL=/bin/bash
@@ -27,6 +26,12 @@ RUN apk add --no-cache --virtual .build-deps \
         linux-headers \
         libxml2-dev \
         libxslt-dev && \
+    git clone https://luajit.org/git/luajit.git && \
+    cd luajit && \
+    git checkout tags/${LUAJIT_VERSION} && \
+    make && \
+    make install && \
+    cd .. && \
     curl -fsSLO https://openresty.org/download/openresty-${OPENRESTY_VERSION#v}.tar.gz && \
     tar -xvf openresty-${OPENRESTY_VERSION#v}.tar.gz && \
     cd openresty-${OPENRESTY_VERSION#v} && \
@@ -71,23 +76,21 @@ RUN apk add --no-cache --virtual .build-deps \
         --with-stream \
         --with-stream_ssl_module \
         --with-threads \
+        --with-luajit=/usr/local \
         --with-luajit-xcflags='-DLUAJIT_NUMMODE=2 -DLUAJIT_ENABLE_LUA52COMPAT' \
         --with-pcre-jit && \
     make && \
     make install && \
     cd .. && \
-    git clone https://github.com/luarocks/luarocks.git && \
-    cd luarocks && \
-    git checkout tags/${LUAROCKS_VERSION} && \
-    ./configure --with-lua-include=/usr/local/openresty/luajit/include && \
+    curl -fsSLO https://luarocks.github.io/luarocks/releases/luarocks-3.11.1.tar.gz && \
+    tar zxf luarocks-3.11.1.tar.gz && \
+    cd luarocks-3.11.1 && \
+    ./configure --with-lua-include=/usr/local/include && \
     make && \
     make install && \
     luarocks install lua-resty-openidc && \
     luarocks install lua-resty-redis-connector && \
-    git clone https://github.com/kubernetes/kubernetes.git && \
-    cd kubernetes && \
-    git checkout tags/${KUBECTL_VERSION} && \
-    build/run.sh make kubectl && \
+    curl -fsSL -o /usr/bin/kubectl https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl && \
     chmod +x /usr/bin/kubectl && \
     apk del --purge .build-deps && \
     rm -rf /tmp/*
