@@ -94,9 +94,9 @@ RUN apk add --no-cache --virtual .build-deps \
       --certificate-identity krel-staging@k8s-releng-prod.iam.gserviceaccount.com \
       --certificate-oidc-issuer https://accounts.google.com && \
     sha256sum -c <(echo "$(cat kubectl.sha256)  kubectl") && \
-    mv kubectl /usr/local/bin/kubectl && \
+    chmod +x ./kubectl && mv kubectl /usr/local/bin/kubectl && \
     apk del --purge .build-deps && \
-    rm -rf /tmp/*
+    rm -rf /tmp/* /root/* /var/cache/*
 
 RUN apk add --no-cache \
         bash \
