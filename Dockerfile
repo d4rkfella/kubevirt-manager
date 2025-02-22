@@ -1,6 +1,6 @@
 FROM cgr.dev/chainguard/wolfi-base:latest@sha256:7afaeb1ffbc9c33c21b9ddbd96a80140df1a5fa95aed6411b210bcb404e75c11
 
-ARG KUBEVIRT_MANAGER_VERSION=1.5.0
+ARG KUBEVIRT_MANAGER_VERSION=v1.5.0
 ARG LUAJIT_VERSION=v2.1.ROLLING
 ARG OPENRESTY_VERSION=v1.27.1.1
 ARG LUAROCKS_VERSION=v3.11.1
@@ -29,8 +29,16 @@ RUN apk add --no-cache --virtual .build-deps \
     git clone https://luajit.org/git/luajit.git && \
     cd luajit && \
     git checkout tags/${LUAJIT_VERSION} && \
-    make && \
-    make install && \
+    export LUAJIT_LIB=/usr/lib && \
+    export LUA_LIB_DIR="$LUAJIT_LIB/lua" && \
+    export LUAJIT_INC=/usr/include/luajit-2.1 && \
+    make CCDEBUG=-g PREFIX=/usr -j $(nproc) && \
+    make install PREFIX=/usr && \
+    LUAJIT_BINARY=$(find /path/to/destdir/usr/bin -name 'luajit-*' -type f | head -n 1) && \
+    if [ -z "$LUAJIT_BINARY" ]; then echo "Error: LuaJIT binary not found!"; exit 1; fi && \
+    ln -sf "$(basename "$LUAJIT_BINARY")" /usr/bin/luajit && \
+    ln -sf "$(basename "$LUAJIT_BINARY")" /usr/bin/lua && \
+    ln -sf "$LUAJIT_INC" /usr/include/lua && \
     cd .. && \
     curl -fsSLO https://openresty.org/download/openresty-${OPENRESTY_VERSION#v}.tar.gz && \
     tar -xvf openresty-${OPENRESTY_VERSION#v}.tar.gz && \
@@ -76,21 +84,24 @@ RUN apk add --no-cache --virtual .build-deps \
         --with-stream \
         --with-stream_ssl_module \
         --with-threads \
-        --with-luajit=/usr/local \
+        --with-luajit=/usr \
         --with-luajit-xcflags='-DLUAJIT_NUMMODE=2 -DLUAJIT_ENABLE_LUA52COMPAT' \
         --with-pcre-jit && \
     make && \
     make install && \
     cd .. && \
-    curl -fsSLO https://luarocks.github.io/luarocks/releases/luarocks-3.11.1.tar.gz && \
-    tar zxf luarocks-3.11.1.tar.gz && \
-    cd luarocks-3.11.1 && \
+    git clone https://github.com/luarocks/luarocks.git && \
+    cd luarocks && \
+    git checkout tags/${LUAROCKS_VERSION} && \
     ./configure --with-lua-include=/usr/local/include && \
     make && \
     make install && \
     luarocks install lua-resty-openidc && \
     luarocks install lua-resty-redis-connector && \
-    curl -fsSL -o /usr/bin/kubectl https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl && \
+    git clone https://github.com/kubernetes/kubernetes.git && \
+    cd kubernetes && \
+    git checkout tags/${KUBECTL_VERSION} && \
+    build/run.sh make kubectl && \
     chmod +x /usr/bin/kubectl && \
     apk del --purge .build-deps && \
     rm -rf /tmp/*
