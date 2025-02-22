@@ -17,7 +17,7 @@ RUN apk add --no-cache --virtual .build-deps \
         git \
         curl \
         cosign \
-        gpg \
+        gnupg \
         openssl-dev \
         pcre-dev \
         zlib-dev \
