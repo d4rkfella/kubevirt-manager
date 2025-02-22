@@ -82,6 +82,10 @@ RUN apk add --no-cache --virtual .build-deps \
     ./configure --with-lua-include=/usr/local/include && \
     make && \
     make install && \
+    luarocks install lua-resty-openidc && \
+    luarocks install lua-resty-redis-connector && \
+    curl -fsSL -o /usr/bin/kubectl https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl && \
+    chmod +x /usr/bin/kubectl && \
     apk del --purge .build-deps && \
     rm -rf /tmp/*
 
@@ -96,10 +100,6 @@ RUN apk add --no-cache \
         zlib \
         libfontconfig1 \
         pcre && \
-    luarocks install lua-resty-openidc && \
-    luarocks install lua-resty-redis-connector && \
-    curl -fsSL -o /usr/bin/kubectl https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl && \
-    chmod +x /usr/bin/kubectl && \
     mkdir -p /etc/nginx/location.d/ && \
     rm /etc/passwd /etc/group && \
     echo 'nginx:x:65532:65532::/nonexistent:/sbin/nologin' > /etc/passwd \ && \
