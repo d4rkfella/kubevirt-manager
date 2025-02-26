@@ -91,13 +91,12 @@ RUN apk add --no-cache --virtual .build-deps \
     cd .. && \
     luarocks install lua-resty-openidc && \
     luarocks install lua-resty-redis-connector && \
-    curl -fsSLO "https://dl.k8s.io/$KUBECTL_VERSION/bin/linux/amd64/kubectl{,.sig,.cert,.sha256}" && \
+    curl -fsSLO "https://dl.k8s.io/$KUBECTL_VERSION/bin/linux/amd64/kubectl{,.sig,.cert}" && \
     cosign verify-blob kubectl \
       --certificate kubectl.cert \
       --signature kubectl.sig \
       --certificate-identity krel-staging@k8s-releng-prod.iam.gserviceaccount.com \
       --certificate-oidc-issuer https://accounts.google.com && \
-    sha256sum -c <(echo "$(cat kubectl.sha256)  kubectl") && \
     chmod +x ./kubectl && mv kubectl /usr/local/bin/kubectl && \
     apk del --purge .build-deps && \
     rm -rf /tmp/* /root/* /var/cache/*
@@ -124,7 +123,7 @@ COPY --chmod=755 docker-entrypoint.sh /
 COPY --chmod=755 30-tune-worker-processes.sh 45-create-bundle-ca.sh 91-startkubectl.sh /docker-entrypoint.d/
 COPY --chmod=755 nginx.conf /etc/nginx/nginx.conf
 COPY --chmod=755 default.conf /etc/nginx/conf.d/default.conf
-COPY --from=kubevirtmanager/kubevirt-manager:1.5.0 --chmod=755 /usr/share/nginx/html /usr/local/openresty/nginx/html
+COPY --from=kubevirtmanager/kubevirt-manager:1.5.0 /usr/share/nginx/html /usr/local/openresty/nginx/html
 
 WORKDIR /etc/nginx
 
