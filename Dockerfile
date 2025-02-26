@@ -113,8 +113,7 @@ RUN apk add --no-cache \
         libfontconfig1 \
         pcre && \
     mkdir -p /etc/nginx/location.d/ && \
-    rm /etc/passwd /etc/group && \
-    echo 'nginx:x:65532:65532::/nonexistent:/sbin/nologin' > /etc/passwd \ && \
+    echo 'nginx:x:65532:65532::/nonexistent:/sbin/nologin' > /etc/passwd && \
     echo 'nginx:x:65532:' > /etc/group && \
     mkdir /docker-entrypoint.d && \
     chmod 755 /docker-entrypoint.d
