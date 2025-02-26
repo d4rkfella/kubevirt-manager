@@ -112,11 +112,11 @@ RUN apk add --no-cache \
         zlib \
         libfontconfig1 \
         pcre && \
-    mkdir -p /etc/nginx/location.d/ && \
+    mkdir -p /etc/nginx/location.d /docker-entrypoint.d /var/log/openresty && \
     echo 'nginx:x:65532:65532::/nonexistent:/sbin/nologin' > /etc/passwd && \
     echo 'nginx:x:65532:' > /etc/group && \
-    mkdir /docker-entrypoint.d && \
-    chmod 755 /docker-entrypoint.d
+    ln -sf /dev/stdout /var/log/openresty/access.log && \
+    ln -sf /dev/stderr /var/log/openresty/error.log
 
 COPY --chmod=555 docker-entrypoint.sh /
 COPY --chmod=555 30-tune-worker-processes.sh 45-create-bundle-ca.sh 91-startkubectl.sh /docker-entrypoint.d/
