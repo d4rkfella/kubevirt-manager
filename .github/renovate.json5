@@ -30,7 +30,7 @@
         '*',
       ],
       matchUpdateTypes: [
-        'minor", 
+        'minor', 
         'patch', 
         'digest',
       ],
