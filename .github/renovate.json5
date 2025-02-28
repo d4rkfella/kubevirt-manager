@@ -18,6 +18,7 @@
       "description": ["Dockerfile Group"],
       "matchDatasources": ["github-releases", "docker", "github-tags"],
       "matchPackageNames": ["*"],
+      "matchPaths": ["Dockerfile"],
       "groupName": "Dockerfile",
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
