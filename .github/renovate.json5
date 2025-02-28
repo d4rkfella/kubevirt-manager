@@ -29,6 +29,11 @@
       matchPackageNames: [
         '*',
       ],
+      matchUpdateTypes: [
+        'minor", 
+        'patch', 
+        'digest',
+      ],
       matchFileNames: [
         'Dockerfile',
       ],
