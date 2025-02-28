@@ -16,7 +16,7 @@
   "packageRules": [
     {
       "description": ["Dockerfile Group"],
-      "matchDatasources": ["github-releases", "docker"],
+      "matchDatasources": ["github-releases", "docker", "github-tags"],
       "matchPackageNames": ["*"],
       "groupName": "Dockerfile",
       "group": {
