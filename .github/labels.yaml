@@ -11,6 +11,8 @@
   color: "027fa0"
 - name: renovate/github-release
   color: "027fa0"
+- name: type/digest
+  color: "ffeC19"
 - name: type/patch
   color: "ffeC19"
 - name: type/minor
