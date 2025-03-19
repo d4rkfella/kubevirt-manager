@@ -9,6 +9,7 @@ contents:
     - wolfi-baselayout
     - tzdata
     - kubevirt-manager
+    - busybox
 accounts:
   groups:
     - groupname: nginx
