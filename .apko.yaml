@@ -26,4 +26,3 @@ entrypoint:
   command: ["/docker-entrypoint.sh"]
 cmd:
   command: ["nginx", "-g", "daemon off;"]
-stop-signal: "SIGQUIT"
