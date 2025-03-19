@@ -36,7 +36,7 @@ jobs:
         id: apko
         with:
           source-date-epoch: ${{ steps.snapshot-date.outputs.epoch }}
-          additional-tags: 1.0.0
+          additional-tags: v1.5.0
           archs: amd64
           slsa-attest: "true"
           sbom-attest: "true"
