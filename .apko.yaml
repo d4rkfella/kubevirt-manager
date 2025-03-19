@@ -23,6 +23,6 @@ environment:
   SHELL: /bin/bash
 stop-signal: "SIGQUIT"
 entrypoint:
-  command: ["/docker-entrypoint.sh"]
+  command: /docker-entrypoint.sh
 cmd:
-  command: ["nginx", "-g", "daemon off;"]
+  command: nginx -g "daemon off;"
