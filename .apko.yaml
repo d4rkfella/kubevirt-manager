@@ -10,6 +10,7 @@ contents:
     - tzdata
     - kubevirt-manager
     - busybox
+    - bash
 accounts:
   groups:
     - groupname: nginx
