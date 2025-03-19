@@ -16,14 +16,14 @@ accounts:
     - username: nginx
       uid: 65532
       gid: 65532
-
 environment:
   LUA_PATH: /usr/share/luajit-2.1/?.lua;/usr/share/luajit-2.1/?/init.lua;/usr/share/lua/5.1/?.lua;/usr/share/lua/5.1/?/init.lua;/usr/site/lualib/?.lua;/usr/site/lualib/?/init.lua;/usr/lualib/?.lua;/usr/lualib/?/init.lua;./?.lua
   LUA_CPATH: /usr/lib/lua/5.1/?.so;/usr/lib/lua/5.1/loadall.so;/usr/site/lualib/?.so;/usr/lualib/?.so;./?.so
   PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   SHELL: /bin/bash
-
-entrypoint: ["/docker-entrypoint.sh"]
-cmd: ["nginx", "-g", "daemon off;"]
-
+stop-signal: "SIGQUIT"
+entrypoint:
+  command: ["/docker-entrypoint.sh"]
+cmd:
+  command: ["nginx", "-g", "daemon off;"]
 stop-signal: "SIGQUIT"
