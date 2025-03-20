@@ -32,7 +32,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4.2.2
   
-      - uses: d4rkfella/actions/apko-snapshot@b97d6bbce68d5b82a848a646f81a3fc9af4e0479 # main
+      - uses: d4rkfella/actions/apko-snapshot@6ef74b5dd9481056a7380733f0cbcd9da376c529 # main
         id: apko
         with:
           source-date-epoch: ${{ steps.snapshot-date.outputs.epoch }}
