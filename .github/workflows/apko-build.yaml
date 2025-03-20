@@ -43,7 +43,7 @@ jobs:
           build-repository-append: https://packages.darkfellanetwork.com
           keyring-append: https://packages.darkfellanetwork.com/melange.rsa.pub
   
-      - uses: d4rkfella/actions/vul-scans@main
+      - uses: d4rkfella/actions/vul-scans@81b2939a844bf668bfee497b3a491c6a5cc1ae1e # main
         id: scans
         with:
           RUN_SNYK: false
