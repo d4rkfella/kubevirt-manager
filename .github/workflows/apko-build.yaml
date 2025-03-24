@@ -32,7 +32,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4.2.2
   
-      - uses: d4rkfella/actions/apko-snapshot@81b2939a844bf668bfee497b3a491c6a5cc1ae1e # main
+      - uses: d4rkfella/actions/apko-snapshot@17a6d3c6bce9f96ca92e09c9f90608dd59e99b37 # main
         id: apko
         with:
           source-date-epoch: ${{ steps.snapshot-date.outputs.epoch }}
@@ -43,7 +43,7 @@ jobs:
           build-repository-append: https://packages.darkfellanetwork.com
           keyring-append: https://packages.darkfellanetwork.com/melange.rsa.pub
   
-      - uses: d4rkfella/actions/vul-scans@81b2939a844bf668bfee497b3a491c6a5cc1ae1e # main
+      - uses: d4rkfella/actions/vul-scans@17a6d3c6bce9f96ca92e09c9f90608dd59e99b37 # main
         id: scans
         with:
           RUN_SNYK: false
