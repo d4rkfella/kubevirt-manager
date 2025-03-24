@@ -14,7 +14,6 @@ jobs:
       id-token: write
       packages: write
       contents: read
-      attestations: write
       security-events: write
     
     steps:
@@ -32,18 +31,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4.2.2
   
-      - uses: d4rkfella/actions/apko-snapshot@81b2939a844bf668bfee497b3a491c6a5cc1ae1e # main
+      - uses: d4rkfella/actions/apko-snapshot@main
         id: apko
         with:
           source-date-epoch: ${{ steps.snapshot-date.outputs.epoch }}
-          additional-tags: v1.5.0
+          additional-tags: 1.5.0
           archs: amd64
           slsa-attest: "true"
           sbom-attest: "true"
           build-repository-append: https://packages.darkfellanetwork.com
           keyring-append: https://packages.darkfellanetwork.com/melange.rsa.pub
   
-      - uses: d4rkfella/actions/vul-scans@81b2939a844bf668bfee497b3a491c6a5cc1ae1e # main
+      - uses: d4rkfella/actions/vul-scans@main
         id: scans
         with:
           RUN_SNYK: false
