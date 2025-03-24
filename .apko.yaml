@@ -24,4 +24,4 @@ environment:
 stop-signal: SIGQUIT
 entrypoint:
   command: /docker-entrypoint.sh
-cmd: nginx -g daemon off;
+cmd: nginx -g "daemon off;"
